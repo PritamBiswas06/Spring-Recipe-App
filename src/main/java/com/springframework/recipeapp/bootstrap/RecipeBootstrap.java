@@ -18,11 +18,16 @@ import com.springframework.recipeapp.repositories.CategoryRepository;
 import com.springframework.recipeapp.repositories.RecipeRepository;
 import com.springframework.recipeapp.repositories.UnitOfMeasureRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -37,8 +42,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Bootstraping the data");
     }
 
     private List<Recipe> getRecipes() {
